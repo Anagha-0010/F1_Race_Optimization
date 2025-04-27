@@ -1,0 +1,36 @@
+Race: Bahrain GP 2024
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 17 laps
+- Stint 2 (Hard Tire): 20 laps
+- Stint 3 (Soft Tire): 20 laps
+Total Optimized Race Time: 6390.97 seconds
+----------------------------------------
+
+Race: Saudi Arabian GP 2024
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 17 laps
+- Stint 2 (Medium Tire): 27 laps
+- Stint 3 (Soft Tire): 22 laps
+Total Optimized Race Time: 6239.53 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2024
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 17 laps
+- Stint 2 (Hard Tire): 20 laps
+- Stint 3 (Soft Tire): 20 laps
+Total Optimized Race Time: 6390.97 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2024
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 17 laps
+- Stint 2 (Medium Tire): 27 laps
+- Stint 3 (Soft Tire): 22 laps
+Total Optimized Race Time: 6239.53 seconds
+----------------------------------------
+

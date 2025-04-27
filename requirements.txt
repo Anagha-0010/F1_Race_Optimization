@@ -1,0 +1,5 @@
+cvxpy
+numpy
+matplotlib
+fastf1
+ecos
