@@ -34,3 +34,268 @@ Stint Plan:
 Total Optimized Race Time: 6239.53 seconds
 ----------------------------------------
 
+Race: Bahrain Grand Prix 2024
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 17 laps
+- Stint 2 (Hard Tire): 20 laps
+- Stint 3 (Soft Tire): 20 laps
+Total Optimized Race Time: 6390.97 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2024
+Driver: HAM
+Stint Plan:
+- Stint 1 (Soft Tire): 12 laps
+- Stint 2 (Hard Tire): 21 laps
+- Stint 3 (Hard Tire): 24 laps
+Total Optimized Race Time: 6528.39 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2024
+Driver: LEC
+Stint Plan:
+- Stint 1 (Soft Tire): 11 laps
+- Stint 2 (Hard Tire): 23 laps
+- Stint 3 (Hard Tire): 23 laps
+Total Optimized Race Time: 6508.05 seconds
+----------------------------------------
+
+Race: Saudi Arabian Grand Prix 2024
+Driver: HAM
+Stint Plan:
+- Stint 1 (Medium Tire): 36 laps
+- Stint 2 (Soft Tire): 14 laps
+Total Optimized Race Time: 5185.19 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2024
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 17 laps
+- Stint 2 (Medium Tire): 27 laps
+- Stint 3 (Soft Tire): 22 laps
+Total Optimized Race Time: 6239.53 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2024
+Driver: HAM
+Stint Plan:
+- Stint 1 (Soft Tire): 16 laps
+- Stint 2 (Medium Tire): 27 laps
+- Stint 3 (Soft Tire): 23 laps
+Total Optimized Race Time: 6268.62 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2024
+Driver: LEC
+Stint Plan:
+- Stint 1 (Soft Tire): 24 laps
+- Stint 2 (Medium Tire): 23 laps
+- Stint 3 (Soft Tire): 19 laps
+Total Optimized Race Time: 6212.05 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2023
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 14 laps
+- Stint 2 (Soft Tire): 22 laps
+- Stint 3 (Hard Tire): 21 laps
+Total Optimized Race Time: 6529.64 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2023
+Driver: HAM
+Stint Plan:
+- Stint 1 (Soft Tire): 12 laps
+- Stint 2 (Hard Tire): 18 laps
+- Stint 3 (Hard Tire): 27 laps
+Total Optimized Race Time: 6650.63 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2023
+Driver: LEC
+Stint Plan:
+- Stint 1 (Soft Tire): 13 laps
+- Stint 2 (Hard Tire): 20 laps
+- Stint 3 (Hard Tire): 7 laps
+Total Optimized Race Time: 4563.76 seconds
+----------------------------------------
+
+Race: Saudi Arabian Grand Prix 2023
+Driver: VER
+Stint Plan:
+- Stint 1 (Medium Tire): 0 laps
+- Stint 2 (Hard Tire): 0 laps
+Total Optimized Race Time: nan seconds
+----------------------------------------
+
+Race: Saudi Arabian Grand Prix 2023
+Driver: LEC
+Stint Plan:
+- Stint 1 (Soft Tire): 16 laps
+- Stint 2 (Hard Tire): 34 laps
+Total Optimized Race Time: 5733.65 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2023
+Driver: VER
+Stint Plan:
+- Stint 1 (Medium Tire): 26 laps
+- Stint 2 (Hard Tire): 26 laps
+- Stint 3 (Soft Tire): 14 laps
+Total Optimized Race Time: 6142.65 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2023
+Driver: HAM
+Stint Plan:
+- Stint 1 (Soft Tire): 24 laps
+- Stint 2 (Medium Tire): 26 laps
+- Stint 3 (Soft Tire): 16 laps
+Total Optimized Race Time: 6274.17 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2023
+Driver: LEC
+Stint Plan:
+- Stint 1 (Hard Tire): 16 laps
+- Stint 2 (Soft Tire): 25 laps
+- Stint 3 (Hard Tire): 25 laps
+Total Optimized Race Time: 6553.29 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2024
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 17 laps
+- Stint 2 (Hard Tire): 20 laps
+- Stint 3 (Soft Tire): 20 laps
+Total Optimized Race Time: 6390.97 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2024
+Driver: HAM
+Stint Plan:
+- Stint 1 (Soft Tire): 12 laps
+- Stint 2 (Hard Tire): 21 laps
+- Stint 3 (Hard Tire): 24 laps
+Total Optimized Race Time: 6528.39 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2024
+Driver: LEC
+Stint Plan:
+- Stint 1 (Soft Tire): 11 laps
+- Stint 2 (Hard Tire): 23 laps
+- Stint 3 (Hard Tire): 23 laps
+Total Optimized Race Time: 6508.05 seconds
+----------------------------------------
+
+Race: Saudi Arabian Grand Prix 2024
+Driver: VER
+Stint Plan:
+- Stint 1 (Medium Tire): 0 laps
+- Stint 2 (Hard Tire): 0 laps
+Total Optimized Race Time: nan seconds
+----------------------------------------
+
+Race: Saudi Arabian Grand Prix 2024
+Driver: HAM
+Stint Plan:
+- Stint 1 (Medium Tire): 36 laps
+- Stint 2 (Soft Tire): 14 laps
+Total Optimized Race Time: 5185.19 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2024
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 17 laps
+- Stint 2 (Medium Tire): 27 laps
+- Stint 3 (Soft Tire): 22 laps
+Total Optimized Race Time: 6239.53 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2024
+Driver: HAM
+Stint Plan:
+- Stint 1 (Soft Tire): 16 laps
+- Stint 2 (Medium Tire): 27 laps
+- Stint 3 (Soft Tire): 23 laps
+Total Optimized Race Time: 6268.62 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2024
+Driver: LEC
+Stint Plan:
+- Stint 1 (Soft Tire): 24 laps
+- Stint 2 (Medium Tire): 23 laps
+- Stint 3 (Soft Tire): 19 laps
+Total Optimized Race Time: 6212.05 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2023
+Driver: VER
+Stint Plan:
+- Stint 1 (Soft Tire): 14 laps
+- Stint 2 (Soft Tire): 22 laps
+- Stint 3 (Hard Tire): 21 laps
+Total Optimized Race Time: 6529.64 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2023
+Driver: HAM
+Stint Plan:
+- Stint 1 (Soft Tire): 12 laps
+- Stint 2 (Hard Tire): 18 laps
+- Stint 3 (Hard Tire): 27 laps
+Total Optimized Race Time: 6650.63 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2023
+Driver: LEC
+Stint Plan:
+- Stint 1 (Soft Tire): 13 laps
+- Stint 2 (Hard Tire): 20 laps
+- Stint 3 (Hard Tire): 7 laps
+Total Optimized Race Time: 4563.76 seconds
+----------------------------------------
+
+Race: Saudi Arabian Grand Prix 2023
+Driver: LEC
+Stint Plan:
+- Stint 1 (Soft Tire): 16 laps
+- Stint 2 (Hard Tire): 34 laps
+Total Optimized Race Time: 5733.65 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2023
+Driver: VER
+Stint Plan:
+- Stint 1 (Medium Tire): 26 laps
+- Stint 2 (Hard Tire): 26 laps
+- Stint 3 (Soft Tire): 14 laps
+Total Optimized Race Time: 6142.65 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2023
+Driver: HAM
+Stint Plan:
+- Stint 1 (Soft Tire): 24 laps
+- Stint 2 (Medium Tire): 26 laps
+- Stint 3 (Soft Tire): 16 laps
+Total Optimized Race Time: 6274.17 seconds
+----------------------------------------
+
+Race: Spanish Grand Prix 2023
+Driver: LEC
+Stint Plan:
+- Stint 1 (Hard Tire): 16 laps
+- Stint 2 (Soft Tire): 25 laps
+- Stint 3 (Hard Tire): 25 laps
+Total Optimized Race Time: 6553.29 seconds
+----------------------------------------
+
+Race: Bahrain Grand Prix 2024\nDriver: VER\nStint Plan:\n- Stint 1 (Soft Tire): 17 laps\n- Stint 2 (Hard Tire): 20 laps\n- Stint 3 (Soft Tire): 20 laps\nTotal Optimized Race Time: 6390.97 seconds\n----------------------------------------\n\nRace: Bahrain Grand Prix 2024\nDriver: HAM\nStint Plan:\n- Stint 1 (Soft Tire): 12 laps\n- Stint 2 (Hard Tire): 21 laps\n- Stint 3 (Hard Tire): 24 laps\nTotal Optimized Race Time: 6528.39 seconds\n----------------------------------------\n\nRace: Bahrain Grand Prix 2024\nDriver: LEC\nStint Plan:\n- Stint 1 (Soft Tire): 11 laps\n- Stint 2 (Hard Tire): 23 laps\n- Stint 3 (Hard Tire): 23 laps\nTotal Optimized Race Time: 6508.05 seconds\n----------------------------------------\n\nRace: Saudi Arabian Grand Prix 2024\nDriver: HAM\nStint Plan:\n- Stint 1 (Medium Tire): 36 laps\n- Stint 2 (Soft Tire): 14 laps\nTotal Optimized Race Time: 5185.19 seconds\n----------------------------------------\n\nRace: Saudi Arabian Grand Prix 2024\nDriver: LEC\nStint Plan:\n- Stint 1 (Medium Tire): 0 laps\n- Stint 2 (Hard Tire): 0 laps\nTotal Optimized Race Time: nan seconds\n----------------------------------------\n\nRace: Spanish Grand Prix 2024\nDriver: VER\nStint Plan:\n- Stint 1 (Soft Tire): 17 laps\n- Stint 2 (Medium Tire): 27 laps\n- Stint 3 (Soft Tire): 22 laps\nTotal Optimized Race Time: 6239.53 seconds\n----------------------------------------\n\nRace: Spanish Grand Prix 2024\nDriver: HAM\nStint Plan:\n- Stint 1 (Soft Tire): 16 laps\n- Stint 2 (Medium Tire): 27 laps\n- Stint 3 (Soft Tire): 23 laps\nTotal Optimized Race Time: 6268.62 seconds\n----------------------------------------\n\nRace: Spanish Grand Prix 2024\nDriver: LEC\nStint Plan:\n- Stint 1 (Soft Tire): 24 laps\n- Stint 2 (Medium Tire): 23 laps\n- Stint 3 (Soft Tire): 19 laps\nTotal Optimized Race Time: 6212.05 seconds\n----------------------------------------\n\nRace: Bahrain Grand Prix 2023\nDriver: VER\nStint Plan:\n- Stint 1 (Soft Tire): 14 laps\n- Stint 2 (Soft Tire): 22 laps\n- Stint 3 (Hard Tire): 21 laps\nTotal Optimized Race Time: 6529.64 seconds\n----------------------------------------\n\nRace: Bahrain Grand Prix 2023\nDriver: HAM\nStint Plan:\n- Stint 1 (Soft Tire): 12 laps\n- Stint 2 (Hard Tire): 18 laps\n- Stint 3 (Hard Tire): 27 laps\nTotal Optimized Race Time: 6650.63 seconds\n----------------------------------------\n\nRace: Bahrain Grand Prix 2023\nDriver: LEC\nStint Plan:\n- Stint 1 (Soft Tire): 13 laps\n- Stint 2 (Hard Tire): 20 laps\n- Stint 3 (Hard Tire): 7 laps\nTotal Optimized Race Time: 4563.76 seconds\n----------------------------------------\n\nRace: Saudi Arabian Grand Prix 2023\nDriver: LEC\nStint Plan:\n- Stint 1 (Soft Tire): 16 laps\n- Stint 2 (Hard Tire): 34 laps\nTotal Optimized Race Time: 5733.65 seconds\n----------------------------------------\n\nRace: Spanish Grand Prix 2023\nDriver: VER\nStint Plan:\n- Stint 1 (Medium Tire): 26 laps\n- Stint 2 (Hard Tire): 26 laps\n- Stint 3 (Soft Tire): 14 laps\nTotal Optimized Race Time: 6142.65 seconds\n----------------------------------------\n\nRace: Spanish Grand Prix 2023\nDriver: HAM\nStint Plan:\n- Stint 1 (Soft Tire): 24 laps\n- Stint 2 (Medium Tire): 26 laps\n- Stint 3 (Soft Tire): 16 laps\nTotal Optimized Race Time: 6274.17 seconds\n----------------------------------------\n\nRace: Spanish Grand Prix 2023\nDriver: LEC\nStint Plan:\n- Stint 1 (Hard Tire): 16 laps\n- Stint 2 (Soft Tire): 25 laps\n- Stint 3 (Hard Tire): 25 laps\nTotal Optimized Race Time: 6553.29 seconds\n----------------------------------------\n\n

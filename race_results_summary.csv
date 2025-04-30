@@ -1,0 +1,16 @@
+Year,Race,Driver,Stint 1,Stint 2,Stint 3,Total Time (s)
+2024,Bahrain Grand Prix,VER,Soft:17,Hard:20,Soft:20,6390.97
+2024,Bahrain Grand Prix,HAM,Soft:12,Hard:21,Hard:24,6528.39
+2024,Bahrain Grand Prix,LEC,Soft:11,Hard:23,Hard:23,6508.05
+2024,Saudi Arabian Grand Prix,HAM,Medium:36,Soft:14,5185.19
+2024,Saudi Arabian Grand Prix,LEC,Medium:0,Hard:0,nan
+2024,Spanish Grand Prix,VER,Soft:17,Medium:27,Soft:22,6239.53
+2024,Spanish Grand Prix,HAM,Soft:16,Medium:27,Soft:23,6268.62
+2024,Spanish Grand Prix,LEC,Soft:24,Medium:23,Soft:19,6212.05
+2023,Bahrain Grand Prix,VER,Soft:14,Soft:22,Hard:21,6529.64
+2023,Bahrain Grand Prix,HAM,Soft:12,Hard:18,Hard:27,6650.63
+2023,Bahrain Grand Prix,LEC,Soft:13,Hard:20,Hard:7,4563.76
+2023,Saudi Arabian Grand Prix,LEC,Soft:16,Hard:34,5733.65
+2023,Spanish Grand Prix,VER,Medium:26,Hard:26,Soft:14,6142.65
+2023,Spanish Grand Prix,HAM,Soft:24,Medium:26,Soft:16,6274.17
+2023,Spanish Grand Prix,LEC,Hard:16,Soft:25,Hard:25,6553.29

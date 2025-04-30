@@ -23,6 +23,8 @@ def get_race_data(year=2024, race_name='Bahrain Grand Prix', driver='VER'):
             continue
         
         tire = stint_data['Compound'].iloc[0]
+        if tire.upper() in ['INTERMEDIATE', 'WET']:
+            continue
         lap_times = stint_data['LapTime'].dt.total_seconds()
 
         baseline = lap_times.iloc[0]
