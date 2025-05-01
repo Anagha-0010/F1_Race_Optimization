@@ -9,6 +9,10 @@ def get_race_data(year=2024, race_name='Bahrain Grand Prix', driver='VER'):
     session = fastf1.get_session(year, race_name, 'R')
     session.load()
 
+
+    # Get rain flag from weather data
+    rain_flag = session.weather_data['Rainfall'].sum() > 0
+
     # Get driver laps
     laps = session.laps.pick_driver(driver).reset_index()
     stints = laps.groupby('Stint')
@@ -64,4 +68,4 @@ def get_race_data(year=2024, race_name='Bahrain Grand Prix', driver='VER'):
     }
     mapped_tires = [compound_map.get(t, t) for t in tire_compounds]
 
-    return np.array(baseline_lap_times), np.array(linear_degradation),np.array(quadratic_degradation), np.array(lap_counts), mapped_tires, transitions
+    return np.array(baseline_lap_times), np.array(linear_degradation),np.array(quadratic_degradation), np.array(lap_counts), mapped_tires, transitions, rain_flag
