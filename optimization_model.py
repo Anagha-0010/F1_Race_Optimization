@@ -27,12 +27,35 @@ races = [
     (2023, "Spanish Grand Prix", "LEC"),
 ]
 
+# Define driver style profiles and multipliers
+from collections import defaultdict
+
+driver_styles = defaultdict(lambda: 'balanced', {
+    'VER': 'aggressive',
+    'HAM': 'balanced',
+    'LEC': 'conservative',
+})
+
+style_multipliers = {
+    'aggressive': 1.2,
+    'balanced': 1.0,
+    'conservative': 0.85
+}
+
+# Define rainy races for adjustment
+rainy_races = {
+    (2024, "Belgian Grand Prix"),
+    (2023, "Monaco Grand Prix"),
+}
+
+
+
 # Loop through all races and drivers
 for year, race_name, driver_code in races:
     print(f"\\nProcessing {race_name} {year} - Driver: {driver_code}")
 
     try:
-        a_s, b_s, L_s, stint_tires = get_race_data(year=year, race_name=race_name, driver=driver_code)
+        a_s, b1_s, b2_s, L_s, stint_tires, transitions = get_race_data(year=year, race_name=race_name, driver=driver_code)
 
         M = len(a_s)
         if M == 0:
@@ -40,16 +63,93 @@ for year, race_name, driver_code in races:
             continue
         N = int(np.sum(L_s))
 
+        #Rain Conditions
+        is_rain = (year, race_name) in rainy_races
+        if is_rain:
+            print(f"Applying rain adjustment for {race_name} {year}...")
+            b1_s = b1_s * 1.5
+            b2_s = b2_s * 1.5
+            L_s = L_s * 0.8
+            #stint_tires = ['Medium' if t == 'Soft' else t for t in stint_tires]
+
+
+
         x = cp.Variable(M, integer=True)
 
+        # Apply degradation multiplier based on driver style
+        style = driver_styles[driver_code]
+        multiplier = style_multipliers.get(style, 1.0)
+        b1_s = b1_s * multiplier
+        b2_s = b2_s * multiplier
+
+
+        # Lap time terms: a_s * x + (b_s / 2) * x^2 + (b_s / 2) * x
         lap_time_terms = cp.sum(
             cp.multiply(a_s, x) +
-            cp.multiply(b_s/2, cp.square(x)) +
-            cp.multiply(b_s/2, x)
+            cp.multiply(b1_s, x) +
+            cp.multiply(b2_s, cp.square(x))
         )
-        pit_stop_time = 20
-        total_pit_time = (M - 1) * pit_stop_time
-        objective = cp.Minimize(lap_time_terms + total_pit_time)
+
+        #dynamic pit stop delays
+        rho = cp.Variable(M - 1)
+        constraints.append(rho >= 18)
+        constraints.append(rho <= 22)
+        total_pit_time = cp.sum(rho)
+
+        #adding dynamic fuel load penalty
+        mean_lap_time = np.mean(a_s)
+        scaling_factor = 0.03  # tunable
+        alpha = scaling_factor * mean_lap_time
+        fuel_penalty_vector = np.array([alpha * (M - i) for i in range(M)])
+        fuel_penalty = cp.sum(cp.multiply(fuel_penalty_vector, x))
+
+        #tire warmup penalty based on tire compounds
+        compound_gamma = {'Soft': 1.0, 'Medium': 1.5, 'Hard': 2.0}
+        warmup_penalty = sum(
+            compound_gamma.get(comp, 1.5) for comp in stint_tires
+        )
+
+        #tire compund switch penalty
+        USE_CALIBRATED_SWITCH_PENALTIES = False  # Toggle here
+
+        if USE_CALIBRATED_SWITCH_PENALTIES:
+            try:    
+                penalty_lookup = {}
+                for (from_t, to_t), penalty in transitions:
+                    penalty_lookup[(from_t, to_t)] = penalty_lookup.get((from_t, to_t), []) + [penalty]
+                switch_penalty_matrix = {
+                    k: round(np.mean(v), 2) for k, v in penalty_lookup.items()
+                }
+            except:
+                switch_penalty_matrix = {}
+        else:
+            switch_penalty_matrix = {
+                ("Soft", "Medium"): 2.0,
+                ("Medium", "Hard"): 2.5,
+                ("Hard", "Soft"): 1.5,
+                ("Soft", "Soft"): 0.5,
+                ("Medium", "Medium"): 0.5,
+                ("Hard", "Hard"): 0.5
+            }
+
+        compound_switch_penalty = 0
+        for k in range(M - 1):
+            c1 = stint_tires[k]
+            c2 = stint_tires[k + 1]
+            compound_switch_penalty += switch_penalty_matrix.get((c1, c2), 1.0)
+
+
+        # tire compound risk and reliability penalty(complementary to tire switch)
+        compound_risk_weights = {'Soft': 0.2, 'Medium': 0.1, 'Hard': 0.0}
+        compound_penalty = cp.sum([
+            compound_risk_weights.get(stint_tires[i], 0.1) * x[i]
+            for i in range(M)
+        ])
+
+        # Updated objective with fuel penalty
+        objective = cp.Minimize(lap_time_terms + total_pit_time + fuel_penalty +  warmup_penalty + compound_switch_penalty
+                                + compound_penalty)
+
 
         constraints = []
         for i in range(M):
