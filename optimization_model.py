@@ -55,7 +55,7 @@ for year, race_name, driver_code in races:
     print(f"\\nProcessing {race_name} {year} - Driver: {driver_code}")
 
     try:
-        a_s, b1_s, b2_s, L_s, stint_tires, transitions = get_race_data(year=year, race_name=race_name, driver=driver_code)
+        a_s, b1_s, b2_s, L_s, stint_tires, transitions, rain_flag = get_race_data(year=year, race_name=race_name, driver=driver_code)
 
         M = len(a_s)
         if M == 0:
@@ -64,9 +64,9 @@ for year, race_name, driver_code in races:
         N = int(np.sum(L_s))
 
         #Rain Conditions
-        is_rain = (year, race_name) in rainy_races
-        if is_rain:
-            print(f"Applying rain adjustment for {race_name} {year}...")
+
+        if rain_flag:
+            print(f"Rain detected for {race_name} {year} — applying adjustments...")
             b1_s = b1_s * 1.5
             b2_s = b2_s * 1.5
             L_s = L_s * 0.8
