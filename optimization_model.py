@@ -4,8 +4,10 @@ import numpy as np
 from f1_data import get_race_data
 import csv
 import os
+import traceback
 
 # Define races and drivers
+
 races = [
     (2024, "Bahrain Grand Prix", "VER"),
     (2024, "Bahrain Grand Prix", "HAM"),
@@ -25,8 +27,16 @@ races = [
     (2023, "Spanish Grand Prix", "VER"),
     (2023, "Spanish Grand Prix", "HAM"),
     (2023, "Spanish Grand Prix", "LEC"),
+    (2024, "Belgian Grand Prix", "VER"),
+    (2024, "Belgian Grand Prix", "HAM"),
+    (2024, "Belgian Grand Prix", "LEC"),
+    (2023, "Monaco Grand Prix", "VER"),
+    (2023, "Monaco Grand Prix", "HAM"),
+    (2023, "Monaco Grand Prix", "LEC")
+
 ]
 
+#races = [((2023, "Bahrain Grand Prix", "VER"))]
 # Define driver style profiles and multipliers
 from collections import defaultdict
 
@@ -42,11 +52,6 @@ style_multipliers = {
     'conservative': 0.85
 }
 
-# Define rainy races for adjustment
-rainy_races = {
-    (2024, "Belgian Grand Prix"),
-    (2023, "Monaco Grand Prix"),
-}
 
 
 
@@ -55,26 +60,40 @@ for year, race_name, driver_code in races:
     print(f"\\nProcessing {race_name} {year} - Driver: {driver_code}")
 
     try:
-        a_s, b1_s, b2_s, L_s, stint_tires, transitions, rain_flag = get_race_data(year=year, race_name=race_name, driver=driver_code)
+        a_s, b1_s, b2_s, L_s, stint_tires, transitions, rain_flag, actual_time = get_race_data(year=year, race_name=race_name, driver=driver_code)
 
         M = len(a_s)
         if M == 0:
             print(f"No usable stint data for {driver_code} at {race_name} {year}")
             continue
         N = int(np.sum(L_s))
+        if N < M:
+            print(f"Skipping {race_name} {year} - {driver_code}: total laps ({N}) < number of stints ({M})")
+            continue
+
+        print(f"Stint compounds: {stint_tires}")
+        print(f"Total Laps: {N}, Stints: {M}")
+
+
 
         #Rain Conditions
-
         if rain_flag:
             print(f"Rain detected for {race_name} {year} — applying adjustments...")
             b1_s = b1_s * 1.5
             b2_s = b2_s * 1.5
-            L_s = L_s * 0.8
+            #L_s = np.maximum(L_s * 0.9, 5)
             #stint_tires = ['Medium' if t == 'Soft' else t for t in stint_tires]
+
+
+        # Check if optimization is possible
+        if np.sum(L_s) < N - 1:  # tolerate small flexibility from relaxed sum constraint
+            print(f"Skipping {race_name} {year} - {driver_code}: sum(L_s)={np.sum(L_s):.1f} < required laps N={N}")
+            continue
 
 
 
         x = cp.Variable(M, integer=True)
+        constraints=[]
 
         # Apply degradation multiplier based on driver style
         style = driver_styles[driver_code]
@@ -89,6 +108,42 @@ for year, race_name, driver_code in races:
             cp.multiply(b1_s, x) +
             cp.multiply(b2_s, cp.square(x))
         )
+
+        # if M <= 1:
+        #     print(f"Skipping {race_name} {year} - {driver_code}: Only {M} stint(s), insufficient for pit stop modeling.")
+        #     continue
+
+        if M == 1:
+            print(f"Skipping {race_name} {year} - {driver_code}: Only 1 stint — using fallback estimate.")
+            avg_lap_time = a_s[0] + b1_s[0] + b2_s[0] * L_s[0]
+            total_time = avg_lap_time * L_s[0]
+            print(f"Estimated race time: {total_time:.2f} seconds")
+            
+            # Log fallback result
+            with open('race_results_log.txt', 'a') as f:
+                f.write(f"Race: {race_name} {year}\n")
+                f.write(f"Driver: {driver_code}\n")
+                f.write(f"- Single stint ({stint_tires[0]}): {int(L_s[0])} laps\n")
+                f.write(f"Estimated Time (no optimization): {total_time:.2f} seconds\n")
+                f.write("-" * 40 + "\n\n")
+
+            # Optionally record to CSV too
+            csv_file = 'race_results_summary.csv'
+            file_exists = os.path.isfile(csv_file)
+            with open(csv_file, 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                if not file_exists:
+                    header = ['Year', 'Race', 'Driver', 'Stint 1', 'Total Time (s)']
+                    writer.writerow(header)
+                row = [year, race_name, driver_code, f"{stint_tires[0]}:{int(L_s[0])}", round(total_time, 2)]
+                writer.writerow(row)
+            
+            continue  # Skip optimization
+
+        # Allow M == 2
+        if M < 1:
+            print(f"Skipping {race_name} {year} - {driver_code}: No valid stints")
+            continue
 
         #dynamic pit stop delays
         rho = cp.Variable(M - 1)
@@ -105,9 +160,9 @@ for year, race_name, driver_code in races:
 
         #tire warmup penalty based on tire compounds
         compound_gamma = {'Soft': 1.0, 'Medium': 1.5, 'Hard': 2.0}
-        warmup_penalty = sum(
-            compound_gamma.get(comp, 1.5) for comp in stint_tires
-        )
+        # warmup_penalty = sum(
+        #     compound_gamma.get(comp, 1.5) for comp in stint_tires
+        # )
 
         #tire compund switch penalty
         USE_CALIBRATED_SWITCH_PENALTIES = False  # Toggle here
@@ -132,11 +187,11 @@ for year, race_name, driver_code in races:
                 ("Hard", "Hard"): 0.5
             }
 
-        compound_switch_penalty = 0
-        for k in range(M - 1):
-            c1 = stint_tires[k]
-            c2 = stint_tires[k + 1]
-            compound_switch_penalty += switch_penalty_matrix.get((c1, c2), 1.0)
+        # compound_switch_penalty = 0
+        # for k in range(M - 1):
+        #     c1 = stint_tires[k]
+        #     c2 = stint_tires[k + 1]
+        #     compound_switch_penalty += switch_penalty_matrix.get((c1, c2), 1.0)
 
 
         # tire compound risk and reliability penalty(complementary to tire switch)
@@ -147,22 +202,34 @@ for year, race_name, driver_code in races:
         ])
 
         # Updated objective with fuel penalty
-        objective = cp.Minimize(lap_time_terms + total_pit_time + fuel_penalty +  warmup_penalty + compound_switch_penalty
-                                + compound_penalty)
+        objective = cp.Minimize(lap_time_terms + total_pit_time + fuel_penalty  + compound_penalty)
+        ''' +  warmup_penalty + compound_switch_penalty)'''
 
 
-        constraints = []
         for i in range(M):
             constraints.append(x[i] <= L_s[i])
-        constraints.append(cp.sum(x) == N)
+        constraints.append(cp.sum(x) >= N - 1)
+        constraints.append(cp.sum(x) <= N + 1)
+
 
         U_c = {"Soft": 2, "Medium": 2, "Hard": 2}
         for compound in ['Soft', 'Medium', 'Hard']:
             indices = [i for i, t in enumerate(stint_tires) if t == compound]
             constraints.append(cp.sum([1 for _ in indices]) <= U_c[compound])
         constraints.append(x >= 1)
+        print("Shapes — a_s:", a_s.shape, "b1_s:", b1_s.shape, "x:", x.shape, "L_s:", L_s.shape)
+
 
         problem = cp.Problem(objective, constraints)
+        print("Objective value (estimate):", lap_time_terms.value)
+        print("Total pit time (estimate):", total_pit_time.value if M > 1 else 0)
+        print("Stint lengths:", L_s)
+        print("Upper bounds:", [f"x[{i}] <= {int(L_s[i])}" for i in range(M)])
+        print("Sum constraint target:", N)
+        print("Rain adjusted b1_s:", b1_s)
+        print("Rain adjusted b2_s:", b2_s)
+        print("Sum of L_s (max total laps allowed):", np.sum(L_s))
+
         problem.solve(solver=cp.ECOS_BB)
 
         if problem.status not in ["optimal", "optimal_inaccurate"]:
@@ -181,6 +248,8 @@ for year, race_name, driver_code in races:
             f.write(f"Stint Plan:\\n")
             for i in range(M):
                 f.write(f"- Stint {i+1} ({stint_tires[i]} Tire): {int(round(x.value[i]))} laps\\n")
+            f.write(f"Actual Race Time: {actual_time:.2f} seconds\n")
+            f.write(f"Delta (Actual - Optimized): {actual_time - problem.value:.2f} seconds\n")
             f.write(f"Total Optimized Race Time: {problem.value:.2f} seconds\\n")
             f.write("-" * 40 + "\\n\\n")
 
@@ -192,10 +261,11 @@ for year, race_name, driver_code in races:
         with open(csv_file, 'a', newline='') as csvfile:
             writer = csv.writer(csvfile)
             if not file_exists:
-                header = ['Year', 'Race', 'Driver'] + [f'Stint {i+1}' for i in range(M)] + ['Total Time (s)']
+                header = ['Year', 'Race', 'Driver'] + [f'Stint {i+1}' for i in range(M)] + ['Total Time (s)', 'Actual Time (s)', 'Delta']
                 writer.writerow(header)
-            row = [year, race_name, driver_code] + stints + [round(problem.value, 2)]
+            row = [year, race_name, driver_code] + stints + [round(problem.value, 2), round(actual_time, 2), round(actual_time - problem.value, 2)]
             writer.writerow(row)
 
     except Exception as e:
-        print(f"Error processing {race_name} {year} - {driver_code}: {str(e)}")
+        print(f"Error processing {race_name} {year} - {driver_code}: {repr(e)}")
+        traceback.print_exc()

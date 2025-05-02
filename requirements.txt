@@ -3,3 +3,4 @@ numpy
 matplotlib
 fastf1
 ecos
+pandas

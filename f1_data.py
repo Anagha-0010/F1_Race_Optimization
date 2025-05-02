@@ -1,7 +1,7 @@
 import fastf1
 import numpy as np
 
-def get_race_data(year=2024, race_name='Bahrain Grand Prix', driver='VER'):
+def get_race_data(year=2023, race_name='Bahrain Grand Prix', driver='VER'):
     # Enable FastF1 cache
     fastf1.Cache.enable_cache('cache')
     
@@ -14,14 +14,13 @@ def get_race_data(year=2024, race_name='Bahrain Grand Prix', driver='VER'):
     rain_flag = session.weather_data['Rainfall'].sum() > 0
 
     # Get driver laps
-    laps = session.laps.pick_driver(driver).reset_index()
+    laps = session.laps.pick_drivers(driver).reset_index()
     stints = laps.groupby('Stint')
     stint_list = list(stints)
 
     tire_compounds = []
     lap_counts = []
     baseline_lap_times = []
-    degradation_rates = []
     linear_degradation = []
     quadratic_degradation = []
     transitions = []
@@ -45,13 +44,29 @@ def get_race_data(year=2024, race_name='Bahrain Grand Prix', driver='VER'):
         tire = stint_data['Compound'].iloc[0]
         if tire.upper() in ['INTERMEDIATE', 'WET']:
             continue
-        lap_times = stint_data['LapTime'].dt.total_seconds()
 
+        lap_times = stint_data['LapTime'].dt.total_seconds()
         laps_idx = np.arange(1, len(lap_times)+1)
-        coeffs = np.polyfit(laps_idx, lap_times, 2)
-        baseline = coeffs[2]
-        b1 = coeffs[1]
-        b2 = coeffs[0]
+
+        # Early skip for bad data
+        if len(laps_idx) < 3 or np.any(np.isnan(lap_times)) or np.all(lap_times == lap_times.iloc[0]):
+            print(f"Skipping stint {stint_num} for {driver} — not enough variation or data")
+            continue
+
+        try:
+            coeffs = np.polyfit(laps_idx, lap_times, 2)
+            if np.any(np.isnan(coeffs)):
+                print(f"Skipping stint {stint_num} for {driver} — regression returned NaN")
+                continue
+            baseline = coeffs[2]
+            b1 = coeffs[1]
+            b2 = coeffs[0]
+            if np.isnan(b1) or np.isnan(b2) or np.isnan(baseline):
+                print(f"Skipping stint {stint_num} for {driver} — regression returned NaN")
+                continue
+        except Exception as e:
+            print(f"Stint {stint_num} polyfit error for {driver}: {e}")
+            continue
 
 
         tire_compounds.append(tire)
@@ -68,4 +83,15 @@ def get_race_data(year=2024, race_name='Bahrain Grand Prix', driver='VER'):
     }
     mapped_tires = [compound_map.get(t, t) for t in tire_compounds]
 
-    return np.array(baseline_lap_times), np.array(linear_degradation),np.array(quadratic_degradation), np.array(lap_counts), mapped_tires, transitions, rain_flag
+    if any(len(lst) == 0 for lst in [tire_compounds, lap_counts, baseline_lap_times]):
+        print(f"[get_race_data] Empty result array detected for {driver} in {race_name} {year}")
+        return [], [], [], [], [], [], False
+
+    if len(baseline_lap_times) == 0:
+        print(f"[get_race_data] No valid stints for {driver} in {race_name} {year}")
+        return [], [], [], [], [], [], False
+    
+    actual_time = laps['LapTime'].dt.total_seconds().sum()
+
+
+    return np.array(baseline_lap_times), np.array(linear_degradation),np.array(quadratic_degradation), np.array(lap_counts), mapped_tires, transitions, rain_flag, actual_time
