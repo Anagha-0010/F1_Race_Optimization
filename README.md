@@ -59,6 +59,9 @@ python result_chart.py
 
 ---
 
+![Race Time Comparison](real_vs_optimized_comparison.png)
+
+
 #  File Structure
 
 ```
