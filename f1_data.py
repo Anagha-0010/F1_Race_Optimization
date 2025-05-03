@@ -1,49 +1,78 @@
 import fastf1
+import pandas as pd
 import numpy as np
 
-def get_race_data(year=2024, race_name='Bahrain Grand Prix', driver='VER'):
-    # Enable FastF1 cache
-    fastf1.Cache.enable_cache('cache')
-    
-    # Load session
+def get_race_data(year, race_name, driver, return_lap_times=False):
+    fastf1.Cache.enable_cache('cache')  # Enables local caching
+
     session = fastf1.get_session(year, race_name, 'R')
     session.load()
 
-    # Get driver laps
-    laps = session.laps.pick_driver(driver).reset_index()
-    stints = laps.groupby('Stint')
+    driver_laps = session.laps.pick_drivers([driver]).pick_quicklaps()
 
-    tire_compounds = []
-    lap_counts = []
-    baseline_lap_times = []
-    degradation_rates = []
+    if driver_laps.empty:
+        print(f"No lap data found for {driver}")
+        return [], [], [], []
 
-    for stint_num, stint_data in stints:
-        if stint_data.empty or len(stint_data) < 5:
+    stint_lap_times = []
+    a_s, b_s, L_s, stint_tires = [], [], [], []
+
+    current_stint = None
+    current_stint_laps = []
+
+    for _, lap in driver_laps.iterlaps():
+        stint = lap['Stint']
+        compound = lap['Compound']
+        lap_time = lap['LapTime'].total_seconds() if pd.notnull(lap['LapTime']) else None
+
+        if lap_time is None:
             continue
-        
-        tire = stint_data['Compound'].iloc[0]
-        if tire.upper() in ['INTERMEDIATE', 'WET']:
-            continue
-        lap_times = stint_data['LapTime'].dt.total_seconds()
 
-        baseline = lap_times.iloc[0]
-        laps_idx = np.arange(1, len(lap_times)+1)
-        coeffs = np.polyfit(laps_idx, lap_times, 1)
-        degradation_per_lap = coeffs[0]
-        degradation_per_lap = max(0, degradation_per_lap)
+        if stint != current_stint:
+            if current_stint_laps:
+                laps = np.arange(1, len(current_stint_laps) + 1).reshape(-1, 1)
+                y = np.array(current_stint_laps)
+                X = np.hstack([laps, laps ** 2])
+                try:
+                    coeffs, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
+                    a_s.append(float(y[0]))
+                    d = float(coeffs[0])
+                    b = float(coeffs[1])
+                except Exception:
+                    d = 0.0
+                    b = 0.0
+                    a_s.append(float(np.mean(current_stint_laps)))
+                b_s.append(max(b, 0))  # ensure convexity
+                L_s.append(len(current_stint_laps))
+                stint_lap_times.append(current_stint_laps)
+                stint_tires.append(current_stint_compound)
 
-        tire_compounds.append(tire)
-        lap_counts.append(len(stint_data))
-        baseline_lap_times.append(baseline)
-        degradation_rates.append(degradation_per_lap)
+            current_stint = stint
+            current_stint_compound = compound
+            current_stint_laps = [lap_time]
+        else:
+            current_stint_laps.append(lap_time)
 
-    # Map tires
-    compound_map = {
-        'C1': 'Hard', 'C2': 'Medium', 'C3': 'Soft',
-        'C4': 'Soft', 'C5': 'Soft',
-        'SOFT': 'Soft', 'MEDIUM': 'Medium', 'HARD': 'Hard'
-    }
-    mapped_tires = [compound_map.get(t, t) for t in tire_compounds]
+    # Final stint
+    if current_stint_laps:
+        laps = np.arange(1, len(current_stint_laps) + 1).reshape(-1, 1)
+        y = np.array(current_stint_laps)
+        X = np.hstack([laps, laps ** 2])
+        try:
+            coeffs, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
+            a_s.append(float(y[0]))
+            d = float(coeffs[0])
+            b = float(coeffs[1])
+        except Exception:
+            d = 0.0
+            b = 0.0
+            a_s.append(float(np.mean(current_stint_laps)))
+        b_s.append(max(b, 0))  # ensure convexity
+        L_s.append(len(current_stint_laps))
+        stint_lap_times.append(current_stint_laps)
+        stint_tires.append(current_stint_compound)
 
-    return np.array(baseline_lap_times), np.array(degradation_rates), np.array(lap_counts), mapped_tires
+    if return_lap_times:
+        return a_s, b_s, L_s, stint_tires, stint_lap_times
+    else:
+        return a_s, b_s, L_s, stint_tires
