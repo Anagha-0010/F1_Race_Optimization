@@ -1,10 +1,9 @@
-
-```markdown
-#  F1 Race Strategy Optimization
-
-This project models and solves the problem of optimizing race strategies in Formula 1 using convex optimization. It compares real-world driver performance with a theoretically optimized strategy that minimizes total race time under simplified constraints.
-
-## 📁 Setup
+# F1 Race Strategy Optimization
+```
+This project models and solves the problem of optimizing race strategies in Formula 1 using convex optimization.
+It compares real-world driver performance with a theoretically optimized strategy that minimizes total race time under simplified constraints.
+```
+# Setup
 
 1. **Clone or download** the repository.
 
@@ -20,7 +19,8 @@ This project models and solves the problem of optimizing race strategies in Form
 
 ---
 
-## ▶️ Run Optimization
+# Commands
+## Run Optimization
 
 To compute optimized stint strategies for selected races and drivers:
 
@@ -33,7 +33,7 @@ python model.py
 
 ---
 
-##  Compare with Real Race Data
+## Compare with Real Race Data
 
 To compare optimized strategy vs actual strategy using real F1 lap data:
 
@@ -46,7 +46,7 @@ python comparison.py
 
 ---
 
-##  Visualize Results
+## Visualize Results
 
 To generate a bar chart of real vs. optimized race times with % gain:
 
@@ -59,7 +59,7 @@ python result_chart.py
 
 ---
 
-##  File Structure
+#  File Structure
 
 ```
 .
@@ -75,7 +75,7 @@ python result_chart.py
 
 ---
 
-##  Summary
+ # Summary
 
 This project formulates F1 race strategy as a convex optimization problem with:
 - Objective: Minimize total race time
